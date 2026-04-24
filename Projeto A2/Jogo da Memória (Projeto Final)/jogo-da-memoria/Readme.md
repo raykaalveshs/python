@@ -1,6 +1,6 @@
 # Jogo da Memória com Python
 
-![Jogo](.img/jogo.png)
+![Jogo](./Projeto%20A2/img/jogo.png)
 
 ## Objetivo
 Praticar lógica de programação, estruturas de repetição, listas e manipulação de dados. 

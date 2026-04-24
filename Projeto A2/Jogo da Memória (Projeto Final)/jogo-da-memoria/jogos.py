@@ -1,7 +1,7 @@
 import tkinter
 import os
 import random
-import tkinter.messagebox
+from tkinter import messagebox 
 from PIL import Image, ImageTk
 
 # CONFIGURAÇÕES:
@@ -63,7 +63,7 @@ def atualizar_tempo():
     if jogo_iniciado:
         tempo += 1
         label_tempo.config(text=f"Tempo: {tempo}s")
-        janela.after(1150, atualizar_tempo)
+        janela.after(1100, atualizar_tempo)
 
 # FUNÇÕES:
 
@@ -223,3 +223,4 @@ for i in range(len(imagens_caminho) * 2):
 # INICIAR:
 
 janela.mainloop()
+

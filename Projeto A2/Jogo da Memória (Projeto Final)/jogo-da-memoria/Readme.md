@@ -72,8 +72,6 @@ imagens_caminho = [os.path.join(pasta, f) for f in arquivos]
 ### 4. Criação da Janela (View)
 
 Padrão: objeto.metodo(parametro=valor)
-          ^
-        janela
 
 Exemplo: janela.title("Jogo da Memória")
 

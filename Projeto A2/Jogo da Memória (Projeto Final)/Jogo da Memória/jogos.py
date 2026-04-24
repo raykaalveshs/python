@@ -1,39 +1,43 @@
-import tkinter as tk
-from PIL import Image, ImageTk
+import tkinter
 import os
 import random
-from tkinter import messagebox
+import tkinter.messagebox
+from PIL import Image, ImageTk
 
-# ===== CONFIG =====
-TAMANHO = 100
-COLUNAS = 4
-ESPACO = 6  # espaço entre cartas
+# CONFIGURAÇÕES:
 
-COR_FUNDO = "#FFE4EC"
-COR_BOTAO = "#FFB6C1"
-COR_HOVER = "#FFA6B5"
-COR_CARTA = "#FFFFFF"
+tamanho = 100
+colunas = 4
+espaco = 6 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PASTA = os.path.join(BASE_DIR, "img")
+cor_fundo = "#FFE4EC"
+cor_botao = "#FFB6C1"
+cor_hover = "#FFA6B5"
+cor_carta = "#FFFFFF"
 
-arquivos = sorted([f for f in os.listdir(PASTA) if f.lower().endswith(".png")])
-imagens_caminho = [os.path.join(PASTA, f) for f in arquivos]
+base_dir = os.path.dirname(os.path.abspath(__file__))
+pasta = os.path.join(base_dir, "img")
 
-# ===== JANELA =====
-janela = tk.Tk()
+arquivos = sorted([f for f in os.listdir(pasta) if f.lower().endswith(".png")])
+imagens_caminho = [os.path.join(pasta, f) for f in arquivos]
+
+# JANELA:
+
+janela = tkinter.Tk()
 janela.title("Jogo da Memória")
-janela.configure(bg=COR_FUNDO)
+janela.configure(bg=cor_fundo)
 
-# ===== IMAGENS =====
+# IMAGENS:
+
 imagens = {}
 for caminho in imagens_caminho:
-    img = Image.open(caminho).resize((TAMANHO, TAMANHO))
+    img = Image.open(caminho).resize((tamanho, tamanho))
     imagens[caminho] = ImageTk.PhotoImage(img)
 
-verso_img = ImageTk.PhotoImage(Image.new("RGB", (TAMANHO, TAMANHO), "#E0E0E0"))
+verso_img = ImageTk.PhotoImage(Image.new("RGB", (tamanho, tamanho), "#F0F0F0"))
 
-# ===== VARIÁVEIS =====
+# VARIÁVEIS:
+
 botoes = []
 cartas = []
 primeiro = None
@@ -44,22 +48,25 @@ tempo = 0
 recorde = None
 pares_encontrados = 0
 
-# ===== LABELS =====
-label_tempo = tk.Label(janela, text="Tempo: 0s", font=("Arial", 14), bg=COR_FUNDO)
-label_tempo.grid(row=0, column=0, columnspan=COLUNAS, pady=(10, 0))
+# LABELS:
 
-label_recorde = tk.Label(janela, text="Recorde: --", font=("Arial", 12), bg=COR_FUNDO)
-label_recorde.grid(row=1, column=0, columnspan=COLUNAS, pady=(0, 10))
+label_tempo = tkinter.Label(janela, text="Tempo: 0s", font=("Arial", 14), bg=cor_fundo)
+label_tempo.grid(row=0, column=0, columnspan=colunas, pady=(10, 0))
 
-# ===== TIMER =====
+label_recorde = tkinter.Label(janela, text="Recorde: --", font=("Arial", 12), bg=cor_fundo)
+label_recorde.grid(row=1, column=0, columnspan=colunas, pady=(0, 10))
+
+# TIMER:
+
 def atualizar_tempo():
     global tempo
     if jogo_iniciado:
         tempo += 1
         label_tempo.config(text=f"Tempo: {tempo}s")
-        janela.after(1000, atualizar_tempo)
+        janela.after(1150, atualizar_tempo)
 
-# ===== FUNÇÕES =====
+# FUNÇÕES:
+
 def iniciar_jogo():
     global jogo_iniciado, tempo, cartas, pares_encontrados
 
@@ -149,65 +156,70 @@ def fim_de_jogo():
         recorde = tempo
         label_recorde.config(text=f"Recorde: {recorde}s")
 
-    messagebox.showinfo("Parabéns!", f"Você venceu em {tempo} segundos!")
+    tkinter.messagebox.showinfo("Parabéns!", f"Você venceu em {tempo} segundos!")
 
-# ===== BOTÕES (ESTILO) =====
+# BOTÕES:
+
 def hover_on(e):
-    e.widget["bg"] = COR_HOVER
+    e.widget["bg"] = cor_hover
 
 def hover_off(e):
-    e.widget["bg"] = COR_BOTAO
+    e.widget["bg"] = cor_botao
 
-btn_start = tk.Button(
+btn_start = tkinter.Button(
     janela,
     text="Iniciar",
     command=iniciar_jogo,
-    bg=COR_BOTAO,
-    activebackground=COR_HOVER,
+    bg=cor_botao,
+    activebackground=cor_hover,
     relief="flat",
     font=("Arial", 10, "bold")
 )
-btn_start.grid(row=2, column=0, columnspan=COLUNAS//2, sticky="ew", padx=10, pady=5)
+
+btn_start.grid(row=2, column=0, columnspan=colunas//2, sticky="ew", padx=10, pady=5)
 btn_start.bind("<Enter>", hover_on)
 btn_start.bind("<Leave>", hover_off)
 
-btn_reset = tk.Button(
+btn_reset = tkinter.Button(
     janela,
     text="Resetar",
     command=resetar_jogo,
-    bg=COR_BOTAO,
-    activebackground=COR_HOVER,
+    bg=cor_botao,
+    activebackground=cor_hover,
     relief="flat",
     font=("Arial", 10, "bold")
 )
-btn_reset.grid(row=2, column=COLUNAS//2, columnspan=COLUNAS//2, sticky="ew", padx=10, pady=5)
+
+btn_reset.grid(row=2, column=colunas//2, columnspan=colunas//2, sticky="ew", padx=10, pady=5)
 btn_reset.bind("<Enter>", hover_on)
 btn_reset.bind("<Leave>", hover_off)
 
-# ===== TABULEIRO =====
+# TABULEIRO:
+
 for i in range(len(imagens_caminho) * 2):
     img = imagens[imagens_caminho[i % len(imagens_caminho)]]
 
-    btn = tk.Button(
+    btn = tkinter.Button(
         janela,
         image=img,
-        width=TAMANHO,
-        height=TAMANHO,
+        width=tamanho,
+        height=tamanho,
         command=lambda i=i: clicar(i),
         bd=2,                     # borda
         relief="raised",          # efeito botão
-        bg=COR_CARTA
+        bg=cor_carta
     )
 
     btn.image = img
     btn.grid(
-        row=(i // COLUNAS) + 3,
-        column=i % COLUNAS,
-        padx=ESPACO,
-        pady=ESPACO
+        row=(i // colunas) + 3,
+        column=i % colunas,
+        padx=espaco,
+        pady=espaco
     )
 
     botoes.append(btn)
 
-# ===== INICIAR =====
+# INICIAR:
+
 janela.mainloop()
